@@ -1,7 +1,7 @@
 package com.divinering.client;
 
 import com.mojang.logging.LogUtils;
-import net.fabricmc.loader.api.FabricLoader;
+import com.bai.god.platform.Platforms;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
@@ -16,14 +16,12 @@ import java.lang.reflect.Method;
  * overwritten. The client moves to {@code AFTER_LEVEL} in that case, after Iris has
  * completed its final level pass.</p>
  *
- * <p>Fabric variant: mod presence is checked through {@link FabricLoader}.</p>
  */
 public final class DivineRingShaderCompat {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final boolean SHADER_MOD_LOADED =
-            FabricLoader.getInstance().isModLoaded("oculus")
-                    || FabricLoader.getInstance().isModLoaded("iris");
+            Platforms.get().isModLoaded("oculus") || Platforms.get().isModLoaded("iris");
     private static final String IRIS_API = "net.irisshaders.iris.api.v0.IrisApi";
 
     private static boolean attempted;

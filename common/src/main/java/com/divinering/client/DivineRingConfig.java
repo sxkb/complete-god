@@ -4,7 +4,7 @@ import com.divinering.RingSettings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.fml.loading.FMLPaths;
+import com.bai.god.platform.Platforms;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -16,12 +16,13 @@ import java.nio.file.Path;
  * Tiny JSON client config. Deliberately independent of ForgeConfigSpec so a host mod
  * can copy the renderer without also copying/registering a config spec. The file is
  * named uniquely ({@code divinering-client.json}) and can be edited by hand.
+ *
  */
 public final class DivineRingConfig {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path FILE = FMLPaths.CONFIGDIR.get().resolve("divinering-client.json");
+    private static final Path FILE = Platforms.get().configDir().resolve("divinering-client.json");
 
     private static boolean enabled = true;
     private static RingSettings settings = RingSettings.DEFAULT;
