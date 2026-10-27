@@ -15,6 +15,16 @@ public final class GodClient {
 
     public static KeyMapping openConfigKey;
 
+    /**
+     * 神级状态客户端联动钩子（如神环显隐），由各平台客户端注册。
+     * 收到 god=true 时调用 accept(true)，god=false 时调用 accept(false)。
+     */
+    private static java.util.function.Consumer<Boolean> godStateListener;
+
+    public static void setGodStateListener(java.util.function.Consumer<Boolean> listener) {
+        godStateListener = listener;
+    }
+
     private GodClient() {
     }
 
@@ -40,6 +50,13 @@ public final class GodClient {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null) {
             GodModeSystem.setClientGodState(mc.player.getUUID(), isGod);
+            if (godStateListener != null) {
+                try {
+                    godStateListener.accept(isGod);
+                } catch (Throwable t) {
+                    God.LOGGER.debug("神级状态联动（神环）失败: {}", t.toString());
+                }
+            }
         }
     }
 

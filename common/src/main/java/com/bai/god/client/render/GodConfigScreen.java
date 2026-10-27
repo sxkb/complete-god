@@ -13,6 +13,12 @@ import java.util.function.Supplier;
 
 public class GodConfigScreen extends Screen {
 
+    /**
+     * 神环（Divine Ring）配置界面打开器，由 Forge 客户端初始化时注册。
+     * 为 null（如 Fabric 端）时"神环设置"行不渲染。
+     */
+    public static java.util.function.Consumer<Screen> ringConfigOpener;
+
     private static int PANEL_BG() { return GodUiConfig.getPanelBg(); }
     private static int SIDEBAR_BG() { return GodUiConfig.getSidebarBg(); }
     private static int CATEGORY_ACTIVE() { return GodUiConfig.getCategoryActive(); }
@@ -220,6 +226,12 @@ public class GodConfigScreen extends Screen {
         rows.add(Row.toggle("挖掘加速", GodConfig::isMiningSpeedBoostEnabled, GodConfig::setMiningSpeedBoostEnabled));
         rows.add(Row.toggle("幸运掉落", GodConfig::isTripleDropEnabled, GodConfig::setTripleDropEnabled));
         rows.add(Row.toggle("默认4级权限", GodConfig::isAlwaysPermissionLevel4Enabled, GodConfig::setAlwaysPermissionLevel4Enabled));
+
+        // 神环（Divine Ring）：平时显隐由本界面开关决定；/god on 强制显现，/god off 恢复平时选择。
+        if (ringConfigOpener != null) {
+            rows.add(Row.modeSelector("神环设置", "打开神环外观配置（颜色/旋转/大小/显隐）。平时是否显现由本界面开关决定；/god on 开启超越一切状态后强制显现，/god off 恢复平时选择。",
+                    () -> "打开配置", () -> ringConfigOpener.accept(this)));
+        }
     }
 
     private void buildWidgets() {
